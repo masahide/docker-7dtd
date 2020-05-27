@@ -21,7 +21,7 @@ jobs:
     - name: get latest version
       run: |
         docker -v
-        LATEST_VER=$(docker run -it --rm cm2network/steamcmd ./steamcmd.sh +login anonymous +app_info_print 294420 +quit  | grep -A 1000 \"294420\" 2>/dev/null |grep -A 1000 \"branches\" |grep -A 1000 \"public\" | grep -B 10 \} --max-count=1 | grep \"buildid\" | cut -d\" -f4)
+        LATEST_VER=$(docker run -rm cm2network/steamcmd ./steamcmd.sh +login anonymous +app_info_print 294420 +quit  | grep -A 1000 \"294420\" 2>/dev/null |grep -A 1000 \"branches\" |grep -A 1000 \"public\" | grep -B 10 \} --max-count=1 | grep \"buildid\" | cut -d\" -f4)
         echo $LATEST_VER
         echo "::set-env name=LATEST_VER::${LATEST_VER}"
         echo "::set-env name=VER::$(cat latest)"
@@ -48,10 +48,10 @@ jobs:
       if: env.LATEST_VER != env.VER
       run: |
         echo ${{ env.LATEST_VER }} >latest
-        git checkout -b v${{ env.LATEST_VER }}
+        git checkout -b ${{ env.LATEST_VER }}
     - name: push branch
       if: env.LATEST_VER != env.VER
       uses: ad-m/github-push-action@master
       with:
-        branch: v${{ env.LATEST_VER }}
+        branch: ${{ env.LATEST_VER }}
         github_token: ${{ secrets.GITHUB_TOKEN }}
