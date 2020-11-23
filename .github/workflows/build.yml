@@ -6,9 +6,6 @@ on:
     - master
     paths-ignore:
     - '**.md'
-  schedule:
-  - cron:  '30 0 * * *'
-
 
 jobs:
   build:
